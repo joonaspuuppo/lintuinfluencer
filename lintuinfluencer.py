@@ -3,12 +3,12 @@ from subprocess import call
 import time
 from time import strftime, gmtime
 import random
-import RPi.GPIO as GPIO
-
+import tweet
+from tweet import Tweet
 
 # Initialize GPIO 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(04, GPIO.IN)   # GPIO4 is pin 7
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(04, GPIO.IN)   # GPIO4 is pin 7
 
 # Twitter Token
 APP_KEY = ''
@@ -34,24 +34,24 @@ while True:
     	if (hour < 0):
         	hour = hour + 24
 
-	# if motion and if the sun hasn't set
-	if (GPIO.input(04) and hour < SUNSET and hour > SUNRISE):
-		try:
-			# Take a picture
-			call("/opt/vc/bin/raspistill -e jpg --vflip -w 320 -h 320 -q 100 -o /tmp/snapshot.jpg", shell=True)
+	# # if motion and if the sun hasn't set
+	# if (GPIO.input(04) and hour < SUNSET and hour > SUNRISE):
+	# 	try:
+	# 		# Take a picture
+	# 		call("/opt/vc/bin/raspistill -e jpg --vflip -w 320 -h 320 -q 100 -o /tmp/snapshot.jpg", shell=True)
 
-			# Sign in to Twitter
-			twitter = Twython(APP_KEY, APP_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+	# 		# Sign in to Twitter
+	# 		twitter = Twython(APP_KEY, APP_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-			# Post a status update with a picture
-			photo = open('/tmp/snapshot.jpg', 'rb')
+	# 		# Post a status update with a picture
+	# 		photo = open('/tmp/snapshot.jpg', 'rb')
 			
-			r = random.randint(0, len(messages)-1)
-			message = messages[r]
-			twitter.update_status_with_media(status=message, media=photo)
+	# 		r = random.randint(0, len(messages)-1)
+	# 		message = messages[r]
+	# 		twitter.update_status_with_media(status=message, media=photo)
 
-		except:
-			print("Unexpected error:")
+	# 	except:
+	# 		print("Unexpected error:")
 		
 		# Sleep so that multiple pictures aren't taken of the same bird
 		time.sleep(SLEEP_DURATION)
