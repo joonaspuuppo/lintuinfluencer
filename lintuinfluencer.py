@@ -6,6 +6,8 @@ import random
 import tweet
 from tweet import Tweet
 
+x = Tweet("test", "04.02.2021 20:26")
+
 # Initialize GPIO 
 #GPIO.setmode(GPIO.BCM)
 #GPIO.setup(04, GPIO.IN)   # GPIO4 is pin 7

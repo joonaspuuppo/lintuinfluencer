@@ -1,7 +1,7 @@
 class Tweet:
-    self.text = ""
-    self.time = ""
-    self.img = ""
+    text = ""
+    time = ""
+    img = ""
 
     def _init_(self):
         return
@@ -11,7 +11,11 @@ class Tweet:
         self.time = time
 
     def _init_(self, text):
-        self.text = text
-    
+        text = text
 
+    def getText(self):
+        return self.text
+
+    def getTime(self):
+        return self.time
 
