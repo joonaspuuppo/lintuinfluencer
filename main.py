@@ -1,19 +1,24 @@
 from tweet import Tweet
 from pynput import keyboard
+import time
 
 text = ""
 
 def on_press(key):
     try:
-        print('alphanumeric key {0} pressed'.format(
-            key.char))
+        global text
+        text += key.char
     except AttributeError:
-        print('special key {0} pressed'.format(
-            key))
+        text += ""
+    # Stop listener
     if key == keyboard.Key.esc:
-        # Stop listener
         return False
-
+    if (len(text) == 280):
+        return False
+    
 # Collect events until released
 with keyboard.Listener(on_press=on_press) as listener:
     listener.join()
+
+newTweet = Tweet(text, time.strftime("%d.%m.%Y, %H:%M:%S"))
+print(newTweet.toString())

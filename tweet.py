@@ -19,3 +19,6 @@ class Tweet:
     def getTime(self):
         return self.time
 
+    def toString(self):
+        return "Tweet: " + self.text + " | Time: " + self.time
+
