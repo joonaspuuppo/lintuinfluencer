@@ -14,6 +14,7 @@ while (True):
         try:
             global text
             text += key.char
+            print(key.char, end = '')
         except AttributeError:
             text += ""
         # Stop listener
@@ -28,4 +29,9 @@ while (True):
 
     # Create a new Tweet with text and time 
     newTweet = Tweet(text, time.strftime("%d.%m.%Y, %H:%M:%S"))
-    print(newTweet.toString())
+    print(" " + newTweet.toString())
+    
+    # Append the tweet to a file
+    f = open("lintuinfluencer_data.txt", "a")
+    f.write(newTweet.toString() + "\n")
+    f.close()
