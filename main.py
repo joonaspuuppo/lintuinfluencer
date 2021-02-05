@@ -20,5 +20,6 @@ def on_press(key):
 with keyboard.Listener(on_press=on_press) as listener:
     listener.join()
 
+# Create a new Tweet with text and time 
 newTweet = Tweet(text, time.strftime("%d.%m.%Y, %H:%M:%S"))
 print(newTweet.toString())
