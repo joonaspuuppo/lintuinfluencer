@@ -124,5 +124,7 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# dfata file
+# data files
 lintuinfluencer_data.txt
+twitteraccess.txt
+lintuinfluencer-5845e6883765.json
