@@ -125,6 +125,6 @@ venv.bak/
 dmypy.json
 
 # data files
-lintuinfluencer_data.txt
+lintuinfluencer_data.csv
 twitteraccess.txt
 lintuinfluencer-5845e6883765.json

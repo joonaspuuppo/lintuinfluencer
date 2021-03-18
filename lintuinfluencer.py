@@ -1,62 +1,71 @@
-from twython import Twython
-from subprocess import call
-import time
-from time import strftime, gmtime
-import random
-import tweet
 from tweet import Tweet
+from pynput import keyboard
+import time
+import csv
+import gspread
+from twython import Twython
+import time
 
-x = Tweet("test", "04.02.2021 20:26")
+# Loop that creates Tweet-objects from user input, writes them to a file and tweets them
 
-# Initialize GPIO 
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setup(04, GPIO.IN)   # GPIO4 is pin 7
+# Google API authorization
+gc = gspread.service_account(filename='lintuinfluencer-5845e6883765.json')
 
-# Twitter Token
-APP_KEY = ''
-APP_SECRET = ''
-ACCESS_TOKEN = ''
-ACCESS_TOKEN_SECRET = ''
+# Open the Google sheet)
+wks = gc.open("lintuinfluencer").sheet1
 
-SLEEP_DURATION = 30
+#Twitter API authorization
+with open('twitteraccess.txt', 'r') as reader:
+    API_KEY = reader.readline().split(": ", 1)[1].strip('\n')
+    API_SECRET = reader.readline().split(": ", 1)[1].strip('\n')
+    ACCESS_TOKEN = reader.readline().split(": ", 1)[1].strip('\n')
+    ACCESS_TOKEN_SECRET = reader.readline().split(": ", 1)[1].strip('\n')
 
-# local time when the sun sets 20 = 8 PM
-SUNSET = 20
-SUNRISE = 6
+twitter = Twython(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-messages = []
-messages.append("The early bird gets the fresh seeds. #birds #birdwatching")
 
-# wait for proximity sensor 
-while True:
+while (True):
+    startTime = time.time()
+    # Initialize text to an empty string
+    text = ""
 
-	# Check current local time
-	utc_hour = int(strftime("%H", gmtime()))
-    	hour = utc_hour - 6
-    	if (hour < 0):
-        	hour = hour + 24
+    # Listen to keyboard input
+    def on_press(key):
+        try:
+            global text
+            text += key.char
+            print(key.char, end = '')
+        except AttributeError:
+            text += ""
+        # Stop listener
+        if key == keyboard.Key.esc:
+            return False
+        if len(text) == 200:
+            return False
+        if (len(text) > 30) and (time.time() - startTime > 180):
+            return False
+        
+    # Collect events until released
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()
 
-	# # if motion and if the sun hasn't set
-	# if (GPIO.input(04) and hour < SUNSET and hour > SUNRISE):
-	# 	try:
-	# 		# Take a picture
-	# 		call("/opt/vc/bin/raspistill -e jpg --vflip -w 320 -h 320 -q 100 -o /tmp/snapshot.jpg", shell=True)
+    # Create a new Tweet with text and time 
+    newTweet = Tweet(text, time.strftime("%d.%m.%Y %H:%M:%S"))
+    print(" " + newTweet.toString())
+    
+    # Append the tweet to a file
+    with open('lintuinfluencer_data.txt', 'a', newline='') as csvfile:
+        tweetwriter = csv.writer(csvfile, delimiter='|', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        tweetwriter.writerow([newTweet.getText(), newTweet.getTime()])
 
-	# 		# Sign in to Twitter
-	# 		twitter = Twython(APP_KEY, APP_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+    # Append the tweet to a Google Sheet
+    nextEmptyRow = wks.find("").row
+    wks.update_cell(nextEmptyRow, 1, newTweet.getText())
+    wks.update_cell(nextEmptyRow, 2, newTweet.getTime())
 
-	# 		# Post a status update with a picture
-	# 		photo = open('/tmp/snapshot.jpg', 'rb')
-			
-	# 		r = random.randint(0, len(messages)-1)
-	# 		message = messages[r]
-	# 		twitter.update_status_with_media(status=message, media=photo)
+    # Post tweet
+    # twitter.update_status(status = newTweet.getText())
+    # print("Tweet!")
 
-	# 	except:
-	# 		print("Unexpected error:")
-		
-		# Sleep so that multiple pictures aren't taken of the same bird
-		time.sleep(SLEEP_DURATION)
-	
-	else:
-		time.sleep(0.25)
+    # Mark tweet as tweeted
+    # wks.update_cell(nextEmptyRow, 3, "Y")
