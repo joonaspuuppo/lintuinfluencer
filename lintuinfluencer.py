@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from tweet import Tweet
 from pynput import keyboard
 import time
