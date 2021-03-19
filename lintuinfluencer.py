@@ -63,9 +63,9 @@ while (True):
     wks.update_cell(nextEmptyRow, 1, newTweet.getText())
     wks.update_cell(nextEmptyRow, 2, newTweet.getTime())
 
-    # Post tweet
-    # twitter.update_status(status = newTweet.getText())
-    # print("Tweet!")
+    #Post tweet
+    twitter.update_status(status = newTweet.getText())
+    print("Tweet!")
 
-    # Mark tweet as tweeted
-    # wks.update_cell(nextEmptyRow, 3, "Y")
+    #Mark tweet as tweeted
+    wks.update_cell(nextEmptyRow, 3, "Y")
