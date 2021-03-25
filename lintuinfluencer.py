@@ -6,7 +6,7 @@ import time
 import csv
 import gspread
 from twython import Twython
-import time
+import random
 
 # Loop that creates Tweet-objects from user input, writes them to a file and tweets them
 
@@ -27,12 +27,17 @@ twitter = Twython(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 text = ""
 previousText = ""
+maxLength = 200
 
 while (True):
     try:
         startTime = time.time()
         # Initialize text to an empty string
         text = ""
+        # Randomize max tweet length
+        maxLength = random.randint(30, 280)
+
+
 
         # Listen to keyboard input
         def on_press(key):
@@ -45,9 +50,9 @@ while (True):
             # Stop listener
             if key == keyboard.Key.esc:
                 return False
-            if len(text) == 200:
+            if len(text) == maxLength:
                 return False
-            if (len(text) > 30) and (time.time() - startTime > 180):
+            if (len(text) > 10) and (time.time() - startTime > 180):
                 return False
             
         # Collect events until released
@@ -84,5 +89,5 @@ while (True):
     
     except Exception as e:
         with open("lintuinfluencer_errorlog.txt", "a") as myfile:
-            myfile.write(repr(e))
+            myfile.write(repr(e) + "\n")
         print(repr(e))
