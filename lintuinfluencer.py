@@ -10,6 +10,26 @@ import random
 
 # Loop that creates Tweet-objects from user input, writes them to a file and tweets them
 
+# Function to check is
+# all the characters in
+# string are or not
+def allCharactersSame(s):
+   
+    s1 = []
+ 
+    # Insert characters in
+    # the set
+    for i in range(len(s)):
+        s1.append(s[i])
+ 
+    # If all characters are same
+    # Size of set will always be 1
+    s1 = list(set(s1))
+    if len(s1) == 1:
+        return True
+    else:
+        return False
+
 # Google API authorization
 gc = gspread.service_account(filename='lintuinfluencer-5845e6883765.json')
 
@@ -36,8 +56,6 @@ while (True):
         text = ""
         # Randomize max tweet length
         maxLength = random.randint(30, 280)
-
-
 
         # Listen to keyboard input
         def on_press(key):
@@ -68,22 +86,22 @@ while (True):
             tweetwriter = csv.writer(csvfile, delimiter='|', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             tweetwriter.writerow([newTweet.getText(), newTweet.getTime()])
 
-        # Only post tweet if it's not a duplicate of the previous tweet.
+        # Only post tweet if it's not too similar to the previous tweet.
         # Important in case a key gets stuck or whatever.
-        if text != previousText:
+        if allCharactersSame(text) and allCharactersSame(previousText) and text[0] == previousText[0]:
+            print("Duplicate tweet. Not tweeted.")
+        else:
             # Append the tweet to a Google Sheet
             nextEmptyRow = wks.find("").row
             wks.update_cell(nextEmptyRow, 1, newTweet.getText())
             wks.update_cell(nextEmptyRow, 2, newTweet.getTime())
 
             # Post tweet
-            twitter.update_status(status = newTweet.getText())
-            print("Tweet!")
+            # twitter.update_status(status = newTweet.getText())
+            # print("Tweet!")
 
             # Mark tweet as tweeted
             wks.update_cell(nextEmptyRow, 3, "Y")
-        else:
-            print("Duplicate tweet. Not tweeted.")
 
         previousText = text
     
