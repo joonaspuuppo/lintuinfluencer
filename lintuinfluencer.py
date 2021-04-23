@@ -10,20 +10,11 @@ import random
 
 # Loop that creates Tweet-objects from user input, writes them to a file and tweets them
 
-# Function to check is
-# all the characters in
-# string are or not
+# Checks if all characters in a given string are the same.
 def allCharactersSame(s):
-   
     s1 = []
- 
-    # Insert characters in
-    # the set
     for i in range(len(s)):
         s1.append(s[i])
- 
-    # If all characters are same
-    # Size of set will always be 1
     s1 = list(set(s1))
     if len(s1) == 1:
         return True
@@ -97,8 +88,8 @@ while (True):
             wks.update_cell(nextEmptyRow, 2, newTweet.getTime())
 
             # Post tweet
-            # twitter.update_status(status = newTweet.getText())
-            # print("Tweet!")
+            twitter.update_status(status = newTweet.getText())
+            print("Tweet!")
 
             # Mark tweet as tweeted
             wks.update_cell(nextEmptyRow, 3, "Y")
