@@ -3,6 +3,7 @@
 Twitter bot that tweets the musings of wild birds as they stomp around on a keyboard.
 Created by Joonas Puuppo & Joonas Ahtikallio in 2021.
 Tweets @lintuinfluencer on Twitter. 
+Currently inactive.
 
 ## Details
 
