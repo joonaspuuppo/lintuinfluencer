@@ -127,6 +127,7 @@ dmypy.json
 # data files
 lintuinfluencer_data.csv
 lintuinfluencer_data.txt
+lintuinfluencer_charfreq.txt
 lintuinfluencer_errorlog.txt
 twitteraccess.txt
 lintuinfluencer-5845e6883765.json
